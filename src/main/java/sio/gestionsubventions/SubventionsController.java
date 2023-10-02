@@ -231,7 +231,7 @@ public class SubventionsController implements Initializable
         {
             TreeItem noeudSecteur;
             TreeItem noeudStatistique;
-            racine.
+            racine.getChildren().clear();
         }
 
 
