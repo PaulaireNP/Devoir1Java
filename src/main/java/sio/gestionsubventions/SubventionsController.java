@@ -17,6 +17,8 @@ public class SubventionsController implements Initializable
 {
     HashMap<String,HashMap<String, TreeMap<Integer,ArrayList<Structure>>>> lesSubventions;
     HashMap<String,HashMap<String, Integer>> lesMontantParSecteur;
+    TreeItem racine;
+    TreeItem noeudSelectionne;
     @FXML
     private AnchorPane apAffecter;
     @FXML
@@ -210,6 +212,28 @@ public class SubventionsController implements Initializable
     @FXML
     public void lvVillesStatsClicked(Event event)
     {
+
+        //Remplir la listeview
+
+        for
+
+        //Remplir les treeview
+        String villeSelectionnee = lvVillesStats.getSelectionModel().getSelectedItem().toString();
+        if (villeSelectionnee.equals(null))
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Choix de la ville");
+            alert.setHeaderText("");
+            alert.setContentText("Veuillez selectionner une ville");
+            alert.showAndWait();
+        }
+        else
+        {
+            TreeItem noeudSecteur;
+            TreeItem noeudStatistique;
+            racine.
+        }
+
 
     }
 }
