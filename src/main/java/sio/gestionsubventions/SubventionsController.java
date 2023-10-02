@@ -16,6 +16,7 @@ import java.util.TreeMap;
 public class SubventionsController implements Initializable
 {
     HashMap<String,HashMap<String, TreeMap<Integer,ArrayList<Structure>>>> lesSubventions;
+    HashMap<String,HashMap<String, Integer>> lesMontantParSecteur;
     @FXML
     private AnchorPane apAffecter;
     @FXML
@@ -128,7 +129,82 @@ public class SubventionsController implements Initializable
     @FXML
     public void btnAffecterSubventionClicked(Event event)
     {
+        if (lvVilles.getSelectionModel().getSelectedItem() == null)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Choix de la ville");
+            alert.setHeaderText("");
+            alert.setContentText("Veuillez sélectionner une ville");
+            alert.showAndWait();
+        }
 
+        else if (lvSecteurs.getSelectionModel().getSelectedItem() == null)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Choix du secteur");
+            alert.setHeaderText("");
+            alert.setContentText("Veuillez sélectionner un secteur");
+            alert.showAndWait();
+        }
+
+        else if (txtNomStructure.getText().equals(""))
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de saisie");
+            alert.setHeaderText("");
+            alert.setContentText("Veuillez saisir une stucture");
+            alert.showAndWait();
+        }
+
+        else if (txtMontant.getText().equals(""))
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de saisie");
+            alert.setHeaderText("");
+            alert.setContentText("Veuillez saisir un montant");
+            alert.showAndWait();
+        }
+
+        else
+        {
+            Structure laStructure = new Structure(txtNomStructure.getText(), Integer.parseInt(txtMontant.getText()));
+            if (!lesSubventions.containsKey(lvVilles.getSelectionModel().getSelectedItem().toString()))
+            {
+                ArrayList<Structure> lesStructures = new ArrayList<>();
+                lesStructures.add(laStructure);
+                TreeMap<Integer, ArrayList<Structure>> lesAnnees = new TreeMap<>();
+                lesAnnees.put(Integer.parseInt(cboAnnees.getSelectionModel().getSelectedItem().toString()), lesStructures);
+                HashMap<String, TreeMap<Integer,ArrayList<Structure>>> lesSecteurs = new HashMap<>();
+                lesSecteurs.put(lvSecteurs.getSelectionModel().getSelectedItem().toString(),lesAnnees);
+                lesSubventions.put(lvVilles.getSelectionModel().getSelectedItem().toString(),lesSecteurs);
+            }
+            else if (!lesSubventions.get(lvVilles.getSelectionModel().getSelectedItem().toString()).containsKey(lvSecteurs.getSelectionModel().getSelectedItem().toString()))
+            {
+                ArrayList<Structure> lesStructures = new ArrayList<>();
+                lesStructures.add(laStructure);
+                TreeMap<Integer, ArrayList<Structure>> lesAnnees = new TreeMap<>();
+                lesAnnees.put(Integer.parseInt(cboAnnees.getSelectionModel().getSelectedItem().toString()), lesStructures);
+                HashMap<String, TreeMap<Integer,ArrayList<Structure>>> lesSecteurs = new HashMap<>();
+                lesSubventions.get(lvVilles.getSelectionModel().getSelectedItem().toString()).put(lvSecteurs.getSelectionModel().getSelectedItem().toString(),lesAnnees);
+            }
+            else if (!lesSubventions.get(lvVilles.getSelectionModel().getSelectedItem().toString()).get(lvSecteurs.getSelectionModel().getSelectedItem().toString()).containsKey(Integer.parseInt(cboAnnees.getSelectionModel().getSelectedItem().toString())))
+            {
+                ArrayList<Structure> lesStructures = new ArrayList<>();
+                lesStructures.add(laStructure);
+                TreeMap<Integer, ArrayList<Structure>> lesAnnees = new TreeMap<>();
+                lesAnnees.put(Integer.parseInt(cboAnnees.getSelectionModel().getSelectedItem().toString()), lesStructures);
+                lesSubventions.get(lvVilles.getSelectionModel().getSelectedItem().toString()).get(lvSecteurs.getSelectionModel().getSelectedItem().toString()).put(Integer.parseInt(cboAnnees.getSelectionModel().getSelectedItem().toString()), lesStructures);
+            }
+            else
+            {
+                lesSubventions.get(lvVilles.getSelectionModel().getSelectedItem().toString()).get(lvSecteurs.getSelectionModel().getSelectedItem().toString()).get(Integer.parseInt(cboAnnees.getSelectionModel().getSelectedItem().toString())).add(laStructure);
+            }
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Affectation réussie");
+            alert.setHeaderText("");
+            alert.setContentText("Subvention enregistrée");
+            alert.showAndWait();
+        }
     }
 
     @FXML
